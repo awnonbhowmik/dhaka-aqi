@@ -1,0 +1,28 @@
+column,dtype,non_null_count,null_count,description
+month_start,datetime64[us],108,0,"First day of the month (datetime, YYYY-MM-DD)"
+year,int64,108,0,Calendar year
+month,int64,108,0,Calendar month (1-12)
+month_name,str,108,0,English month name
+hourly_observations,int64,108,0,Count of hourly observations in the month
+expected_hours,int64,108,0,Expected number of hours in the month
+coverage_pct,float64,108,0,Observation coverage percentage (0-100)
+pm25_mean,float64,108,0,Monthly mean PM2.5 concentration (µg/m³)
+pm25_median,float64,108,0,Monthly median PM2.5 (µg/m³)
+pm25_min,float64,108,0,Monthly minimum PM2.5 (µg/m³)
+pm25_max,float64,108,0,Monthly maximum PM2.5 (µg/m³)
+aqi_mean,float64,108,0,Monthly mean AQI
+aqi_median,float64,108,0,Monthly median AQI
+aqi_min,float64,108,0,Monthly minimum AQI
+aqi_max,float64,108,0,Monthly maximum AQI
+is_partial_month,bool,108,0,True if coverage is incomplete
+population_total,int64,108,0,"Total national population (annual, repeated monthly)"
+urban_population,int64,108,0,"Urban population (annual, repeated monthly)"
+rural_population,int64,108,0,"Rural population (annual, repeated monthly)"
+urban_share_pct,float64,108,0,Urban share of population (%)
+rural_share_pct,float64,108,0,Rural share of population (%)
+hdi,float64,108,0,"Human Development Index (annual, not rounded)"
+poverty_rate_pct,float64,108,0,National poverty rate (%)
+source_notes,str,108,0,Provenance notes; flags inferred/filled values
+norm_wind,float64,60,48,"Normalised monthly wind speed (File 2, 2017-2021 only)"
+norm_rain,float64,60,48,"Normalised monthly rainfall (File 2, 2017-2021 only)"
+season,str,108,0,Meteorological season (Winter/Pre-monsoon/Monsoon/Post-monsoon)
