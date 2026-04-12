@@ -105,24 +105,23 @@ and rural zones.
 
 | § | Section | Key outputs |
 |---|---|---|
-| 0 | **Study Area Map** | `fig00_study_area.png` |
+| 0 | **Study Area Map** | `fig01_study_area.png` |
 | 1 | **Setup & Data Loading** | Dataset summary, column types |
-| 2 | **Descriptive Statistics & Data Quality** | `fig01_distributions.png`, `fig02_cv_analysis.png`, `fig03_aqi_category_pie.png` |
-| 3 | **Long-Term Temporal Trends** | Mann-Kendall table, OLS table, `fig04_monthly_time_series.png`, `fig05_annual_trends.png` |
-| 4 | **Seasonal & Monthly Climatology** | `fig06_monthly_climatology.png`, `fig07_aqi_heatmap.png`, `fig08_seasonal_distributions.png` |
-| 5 | **Time-Series Diagnostics** | ADF table, `fig09_acf_pacf.png`, `fig10_stl_decomposition.png`, `fig11_anomaly_detection.png`, `fig12_pm_ratio.png` |
-| 6 | **Pollutant Inter-relationships** | `fig13_correlation_matrix.png`, `fig14_pairwise_scatter.png`, `fig15_source_apportionment.png` |
+| 2 | **Descriptive Statistics & Data Quality** | `fig02_distributions.png`, `fig03_cv_analysis.png`, `fig04_aqi_category_pie.png` |
+| 3 | **Long-Term Temporal Trends** | Mann-Kendall table, OLS table, `fig05_monthly_time_series.png`, `fig06_annual_trends.png`, `fig07_interannual_boxplots.png` |
+| 4 | **Seasonal & Monthly Climatology** | `fig08_monthly_climatology.png`, `fig09_aqi_heatmap.png`, `fig10_seasonal_distributions.png`, `fig11_violin_by_season.png` |
+| 5 | **Time-Series Diagnostics** | ADF table, `fig12_acf_pacf.png`, `fig13_stl_decomposition.png`, `fig14_anomaly_detection.png`, `fig15_pm_ratio.png` |
+| 6 | **Pollutant Inter-relationships** | `fig16_correlation_matrix.png`, `fig17_pairwise_scatter.png`, `fig18_source_apportionment.png` |
 | 7 | **Statistical Testing — Seasonal** | Kruskal-Wallis table, Dunn's post-hoc tables |
-| 8 | **COVID-19 Impact Assessment** | Cohen's d table, `fig16_covid_impact.png` |
-| 9 | **Meteorological Drivers** | `fig17_rainfall_scatter.png`, `fig18_rainfall_dual_axis.png`, `fig19_rolling_correlation.png` |
-| 10 | **Socioeconomic Context & EKC** | EKC test output, `fig20_socioeconomic.png`, `fig21_per_capita.png` |
-| 11 | **WHO & EPA Guideline Exceedance** | Exceedance table, `fig22_exceedance.png` |
-| 12 | **Health Burden Estimation** | IHME GBD CRF table, `fig23_health_burden.png` |
-| 13 | **Regional Comparison** | `fig24_regional_comparison.png` |
-| 14 | **Predictive Modelling — Evaluation** | MAE/RMSE/MAPE table, `fig25_model_evaluation.png` |
-| 15 | **Multi-Model Forecasts to 2030** | Ensemble summary table, `fig26_forecasts_2030.png` |
-| 16 | **Policy Scenario Projections** | Scenario table, `fig27_scenario_projections.png` |
-| 17 | **Conclusions & Limitations** | Summary, limitations table |
+| 8 | **COVID-19 Impact Assessment** | Cohen's d table, `fig19_covid_impact.png` |
+| 9 | **Meteorological Drivers** | `fig20_rainfall_scatter.png`, `fig21_rainfall_dual_axis.png`, `fig22_rolling_correlation.png` |
+| 10 | **Socioeconomic Context & EKC** | EKC test output, `fig23_socioeconomic.png`, `fig24_per_capita.png` |
+| 11 | **WHO & EPA Guideline Exceedance** | Exceedance table, `fig25_exceedance.png` |
+| 12 | **Health Burden Estimation** | IHME GBD CRF table, `fig26_health_burden.png` |
+| 13 | **Regional Comparison** | `fig27_regional_comparison.png` |
+| 14 | **Predictive Modelling — Evaluation** | MAE/RMSE/MAPE table, `fig28_model_performance_heatmap.png`, `fig29_model_evaluation.png` |
+| 15 | **Multi-Model Forecasts to 2030** | Ensemble summary table, `fig30_forecasts_2030.png` |
+| 16 | **Conclusions & Limitations** | Summary, limitations table |
 
 ---
 
@@ -177,11 +176,11 @@ Tested with Python 3.10+, geopandas ≥ 1.0, pandas ≥ 2.0.
 1. Clone the repository and navigate to the project root.
 2. Install dependencies (see Prerequisites above).
 3. Open `main.ipynb` in Jupyter Lab or VS Code.
-4. Run all cells in order (§ 0 through § 17).
+4. Run all cells in order (§ 0 through § 16).
 5. All figures are saved automatically to `figures/` at 300 DPI.
 
-> **Note**: § 14 and § 15 fit SARIMA and Prophet models. These cells may take
-> 3–10 minutes depending on hardware.
+> **Note**: § 14 and § 15 fit SARIMA and Prophet models and generate forecasts to 2030.
+> These cells may take 3–10 minutes depending on hardware.
 
 ---
 
