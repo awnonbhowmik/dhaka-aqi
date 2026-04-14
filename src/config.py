@@ -56,12 +56,12 @@ EPA = {"pm25": 35, "pm10": 150, "no2": 100, "so2": 75}   # US EPA 24-h
 
 # ── AQI category breakpoints (US EPA) ─────────────────────────────────────────
 AQI_CATS = [
-    (0,   50,  "Good",                   "#00E400"),
-    (51,  100, "Moderate",               "#FFFF00"),
-    (101, 150, "Unhealthy for Sensitive","#FF7E00"),
-    (151, 200, "Unhealthy",              "#FF0000"),
-    (201, 300, "Very Unhealthy",         "#8F3F97"),
-    (301, 500, "Hazardous",              "#7E0023"),
+    (0,   50,  "Good",                   "#5A9E6A"),  # muted green
+    (51,  100, "Moderate",               "#C4A94A"),  # muted amber
+    (101, 150, "Unhealthy for Sensitive","#CC7A3A"),  # muted burnt orange
+    (151, 200, "Unhealthy",              "#B54040"),  # muted brick red
+    (201, 300, "Very Unhealthy",         "#7A4E82"),  # muted purple
+    (301, 500, "Hazardous",              "#5C2E2E"),  # dark maroon
 ]
 
 # ── Matplotlib publication style ───────────────────────────────────────────────
