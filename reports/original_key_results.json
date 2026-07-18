@@ -1,0 +1,23 @@
+{
+  "starting_commit": "deb9b0dc064e9a6603f76415b50aa8f69fb394cf",
+  "snapshot_method": "stored_notebook_outputs_not_reexecuted",
+  "notebooks": [
+    {
+      "path": "main.ipynb",
+      "code_cells": 47,
+      "executed_code_cells": 47,
+      "stored_errors": 0,
+      "stored_png_images": 30
+    },
+    {
+      "path": "analysis.ipynb",
+      "code_cells": 26,
+      "executed_code_cells": 26,
+      "stored_errors": 0,
+      "stored_png_images": 15
+    }
+  ],
+  "manuscript_available": false,
+  "known_legacy_study_period": "2017-01 through 2025-12",
+  "known_legacy_daily_period": "2017-01-01 through 2026-05-02"
+}
