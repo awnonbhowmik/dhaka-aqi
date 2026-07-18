@@ -1,0 +1,2 @@
+n_complete_months,start_month,end_month,mean_ug_m3,median_ug_m3,std_ug_m3,iqr_ug_m3,min_ug_m3,max_ug_m3
+71,2019-01-01,2025-02-01,98.65118309859155,79.658,59.32385518016698,98.8185,25.971,234.058

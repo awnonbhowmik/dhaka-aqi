@@ -20,9 +20,7 @@ env/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Figures (generated at runtime — do not commit)
-figures/*.png
-figures/*.pdf
+# Publication figures are generated and tracked for manuscript traceability.
 
 # Large provider files and caches (generated small processed tables are tracked)
 data/raw/cams/*.grib

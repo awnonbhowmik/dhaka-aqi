@@ -1,0 +1,22 @@
+year,standard,version,averaging_period,threshold_ug_m3,valid_days,days_above_threshold,design_statistic_ug_m3,meets_form
+2019,WHO AQG,2021,24-hour; 99th percentile form,15.0,359,350,265.71600000000007,False
+2019,Bangladesh NAAQS,2022,24-hour; no more than one crossing/year,65.0,359,182,299.1,False
+2019,US EPA NAAQS,2024,24-hour; annual 98th percentile (formal 3-year design value),35.0,359,268,259.52399999999994,False
+2020,WHO AQG,2021,24-hour; 99th percentile form,15.0,352,343,261.098,False
+2020,Bangladesh NAAQS,2022,24-hour; no more than one crossing/year,65.0,352,157,270.5,False
+2020,US EPA NAAQS,2024,24-hour; annual 98th percentile (formal 3-year design value),35.0,352,253,244.53000000000014,False
+2021,WHO AQG,2021,24-hour; 99th percentile form,15.0,345,337,281.50800000000004,False
+2021,Bangladesh NAAQS,2022,24-hour; no more than one crossing/year,65.0,345,189,305.6,False
+2021,US EPA NAAQS,2024,24-hour; annual 98th percentile (formal 3-year design value),35.0,345,269,265.224,False
+2022,WHO AQG,2021,24-hour; 99th percentile form,15.0,346,346,270.8350000000003,False
+2022,Bangladesh NAAQS,2022,24-hour; no more than one crossing/year,65.0,346,197,331.9,False
+2022,US EPA NAAQS,2024,24-hour; annual 98th percentile (formal 3-year design value),35.0,346,312,246.68999999999997,False
+2023,WHO AQG,2021,24-hour; 99th percentile form,15.0,362,362,291.3249999999999,False
+2023,Bangladesh NAAQS,2022,24-hour; no more than one crossing/year,65.0,362,228,339.5,False
+2023,US EPA NAAQS,2024,24-hour; annual 98th percentile (formal 3-year design value),35.0,362,313,264.91599999999994,False
+2024,WHO AQG,2021,24-hour; 99th percentile form,15.0,362,359,285.49699999999984,False
+2024,Bangladesh NAAQS,2022,24-hour; no more than one crossing/year,65.0,362,205,299.7,False
+2024,US EPA NAAQS,2024,24-hour; annual 98th percentile (formal 3-year design value),35.0,362,308,251.15599999999986,False
+2025,WHO AQG,2021,24-hour; 99th percentile form,15.0,83,83,348.19199999999967,False
+2025,Bangladesh NAAQS,2022,24-hour; no more than one crossing/year,65.0,83,82,340.2,False
+2025,US EPA NAAQS,2024,24-hour; annual 98th percentile (formal 3-year design value),35.0,83,83,314.91999999999996,False
