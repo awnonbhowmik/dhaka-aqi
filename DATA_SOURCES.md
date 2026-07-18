@@ -19,12 +19,21 @@ The Mendeley dataset `10.17632/9j447cynb9.2` is excluded: its public metadata
 does not identify original providers, station/sensor IDs, instruments, QA, or
 method continuity sufficient for trend inference.
 
+BMD Dhaka surface observations are the preferred meteorological source. BMD's
+official portal lists suitable daily rainfall, temperature, humidity, wind, and
+pressure observations, but historical files require a paid, purpose-limited
+request. The exact request and ingestion contract are in
+`docs/bmd_data_request.md`. Public climatological normals are not substituted
+for date-specific weather, and the meteorology product stays empty until an
+authorized BMD delivery is verified.
+
 Authoritative documentation:
 
 - AirNow daily format: https://docs.airnowapi.org/docs/DailyDataFactSheet.pdf
 - Bangladesh DoE 2018-2023 report: https://doe.gov.bd/pages/publications/ambient-air-quality-in-bangladesh-2018-2023-7b0bcb-6922da5381fc96cef9eb5f62
 - OpenAQ v3: https://docs.openaq.org/about/about
 - CAMS EAC4: https://confluence.ecmwf.int/spaces/CKB/pages/83395896/CAMS+Reanalysis+data+documentation
+- BMD data portal: https://dataportal.bmd.gov.bd/web/
+- BMD public climate products: https://bmd.gov.bd/web/en/climate
 - WHO 2021 AQG: https://www.who.int/publications/i/item/9789240034228
 - EPA 2024 AQI update: https://www.epa.gov/system/files/documents/2024-02/pm-naaqs-air-quality-index-fact-sheet.pdf
-

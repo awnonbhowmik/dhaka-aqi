@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STEPS = [
     "scripts/build_primary_dataset.py",
     "scripts/build_validation_dataset.py",
+    "scripts/build_meteorology_dataset.py",
     "scripts/audit_legacy.py",
     "scripts/run_analysis.py",
     "scripts/run_forecasting.py",
@@ -26,4 +27,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

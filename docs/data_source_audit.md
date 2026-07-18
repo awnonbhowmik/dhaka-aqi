@@ -69,10 +69,16 @@ it is quarantined pending reprocessing.
 ### Meteorology
 
 BMD is preferred for Dhaka station rainfall, temperature, humidity, and wind,
-but its historical portal advertises data purchase rather than a reproducible
-open download. ERA5-Land is the documented fallback (0.1-degree distributed
-grid, native ~9 km, 1950-present). No normalized rainfall index is accepted as
-physical rainfall.
+but its historical portal supplies data for a fee and restricts reuse to the
+declared purpose rather than offering an anonymous open download. Its public
+metadata lists a Dhaka surface station from 1953 and the needed rainfall,
+temperature, relative-humidity, wind, and pressure variables. The free climate
+pages are normals or summaries, not date-specific 2019-2025 covariates. The
+exact lawful request and prepared ingestion contract are documented in
+`docs/bmd_data_request.md`; the processed table remains empty until a delivery
+is supplied and verified. ERA5-Land is the documented fallback (0.1-degree
+distributed grid, native ~9 km, 1950-present). No normalized rainfall index is
+accepted as physical rainfall.
 
 ## Standards
 

@@ -29,3 +29,15 @@ not fill later dates.
 OpenAQ API v3 requires an API key. An adapter is documented, but no credential
 is stored or requested in the repository. OpenAQ is not needed for the selected
 primary series because the original AirNow archive is directly accessible.
+
+## BMD Dhaka meteorology
+
+BMD's public metadata confirms that the Dhaka surface station and the required
+rainfall, temperature, humidity, wind, and pressure variables are available.
+The historical observations must be ordered through BMD's paid portal and are
+subject to purpose and redistribution restrictions. Submitting an order needs
+the researcher's identity, organization, contact details, declared purpose,
+and payment; none were inferred or submitted. The repository now contains an
+exact request specification and a validated daily-to-monthly ingestion path,
+but `data/processed/meteorology_monthly.csv` intentionally remains empty until
+an authorized delivery is supplied. See `docs/bmd_data_request.md`.

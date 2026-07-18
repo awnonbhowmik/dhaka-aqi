@@ -306,7 +306,7 @@ Exact extracted AirNow rows, request URLs, response checksums, standardized
 products, source manifest, provenance ledger, code, tests, and generated outputs
 are in the repository. Large or terms-restricted CAMS, BMD, OpenAQ, or future
 DoE raw files must be downloaded separately under provider terms. The paper was
-generated from repository commit `a23c18f84355f8d87cc17e81d9542b7fc9879e7f`. Raw retrieval occurred on
+generated from repository commit `896aae5e4b410aed9ded256a53a400eed700a514`. Raw retrieval occurred on
 2026-07-18 UTC (2026-07-17 America/New_York). The supplied original DOCX is
 preserved unchanged with a SHA-256 manifest; its complete claim and 41-reference
 audits are distributed with the revision.

@@ -28,6 +28,9 @@ data/raw/cams/*.nc
 data/raw/cams/*.zip
 data/raw/meteorology/*.grib
 data/raw/meteorology/*.nc
+data/raw/bmd/
+# BMD deliveries are purpose-limited and must not be redistributed by default.
+data/staging/bmd_*.csv
 
 # IDE / editors
 .vscode/

@@ -14,6 +14,7 @@ import yaml
 from src.aggregation.primary import build_daily, build_monthly
 from src.aqi import aqi_category, pm25_aqi
 from src.data_sources.airnow import parse_target_line
+from src.data_sources.bmd import MONTHLY_COLUMNS, aggregate_monthly
 from src.forecasting import rolling_origin
 from src.quality.completeness import day_coverage_pct, expected_days, is_complete_month
 
@@ -330,3 +331,46 @@ def test_35_revised_manuscript_does_not_carry_rejected_dois_or_duplicate_abstrac
     assert all(doi not in paper for doi in rejected["doi"])
     assert paper.count("# Abstract") == 1
     assert "Awnon Bhowmik" in paper and "Mahmudul Hasan" in paper and "Goutam Saha" in paper
+
+
+def test_36_bmd_product_is_explicitly_empty_without_a_delivery() -> None:
+    meteorology = pd.read_csv(ROOT / "data/processed/meteorology_monthly.csv")
+    assert meteorology.empty
+    assert meteorology.columns.tolist() == MONTHLY_COLUMNS
+
+
+def test_37_bmd_daily_contract_aggregates_without_imputation() -> None:
+    rows = []
+    for date, rainfall, humidity, direction in [
+        ("2024-01-01", 1.5, 70.0, 350.0),
+        ("2024-01-02", 2.0, 80.0, 10.0),
+    ]:
+        for variable, value, unit in [
+            ("rainfall", rainfall, "mm"),
+            ("relative_humidity", humidity, "percent"),
+            ("wind_direction", direction, "degree"),
+        ]:
+            rows.append(
+                {
+                    "date_local": date,
+                    "station_id": "documented-bmd-id",
+                    "station_name": "Dhaka",
+                    "latitude": 23.0,
+                    "longitude": 90.0,
+                    "variable": variable,
+                    "value": value,
+                    "unit": unit,
+                    "qa_flag": "valid",
+                    "observation_basis": "daily",
+                    "source_file": "provider-delivery.xlsx",
+                    "retrieval_date": "2026-07-18",
+                    "notes": "fixture",
+                }
+            )
+    monthly = aggregate_monthly(pd.DataFrame(rows)).set_index("variable")
+    assert monthly.loc["rainfall", "value"] == pytest.approx(3.5)
+    assert monthly.loc["relative_humidity", "value"] == pytest.approx(75.0)
+    assert monthly.loc["wind_direction", "value"] == pytest.approx(0.0)
+    assert monthly["valid_days"].eq(2).all()
+    assert not monthly["is_complete"].any()
+    assert set(monthly["measurement_type"]) == {"observed_ground_meteorology"}

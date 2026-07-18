@@ -39,15 +39,6 @@ def main() -> None:
             "measurement_type",
             "notes",
         ],
-        "meteorology_monthly.csv": [
-            "month_start",
-            "variable",
-            "value",
-            "unit",
-            "provider",
-            "measurement_type",
-            "notes",
-        ],
         "context_annual.csv": [
             "year",
             "variable",
@@ -63,4 +54,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

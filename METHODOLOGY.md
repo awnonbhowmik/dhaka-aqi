@@ -13,6 +13,14 @@ Monthly completeness requires at least 75% valid daily summaries. Hourly
 coverage is unknown and remains null. The terminal month must reach month-end;
 therefore March 2025 is partial despite 77.4% numerical day coverage.
 
+BMD daily Dhaka surface meteorology is the prespecified weather source. A BMD
+delivery is preserved separately, mapped without imputation to the explicit
+long staging schema, and aggregated independently by variable. Rainfall uses a
+sum, wind direction a circular mean, and other scalar variables an arithmetic
+mean; each variable-month must meet the same 75% daily-coverage rule. These
+steps are implemented but remain inactive until an authorized BMD delivery is
+supplied and its station metadata, units, QA, and reuse terms are verified.
+
 ## AQI
 
 AQI is calculated from the physical 24-hour PM2.5 concentration using U.S. EPA
@@ -39,4 +47,3 @@ Metrics are MAE, RMSE, MASE, sMAPE, and 95% interval coverage. Positive-support
 statistical models use log1p concentration. Model selection is lowest mean MASE.
 The empirical forecast is 24 months. 2030 lines are deterministic policy/health
 benchmarks and are never called forecasts.
-

@@ -8,7 +8,9 @@
 - No reproducible raw Bangladesh DoE series was obtained for independent numeric validation.
 - No physical PM10, NO2, SO2, CO, or O3 series meets the provenance requirements.
 - Hourly counts/flags are unavailable from daily summary products.
-- Meteorology was not obtained, so COVID and trend models cannot adjust for weather.
+- BMD offers the needed Dhaka surface meteorology, but historical observations
+  require a paid, purpose-limited request. No delivery has yet been supplied,
+  so COVID and trend models cannot adjust for weather.
 - Trend significance changes under serial-correlation handling.
 - AQI is mathematically determined by PM2.5 here and is not an independent outcome.
 - Forecast validation has three rolling origins and includes three explicitly partial internal months.
