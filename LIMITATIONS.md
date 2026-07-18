@@ -14,4 +14,4 @@
 - Forecast validation has three rolling origins and includes three explicitly partial internal months.
 - The 24-month forecast assumes past seasonality/process dynamics remain informative.
 - 2030 scenarios are benchmarks without probabilistic implementation uncertainty.
-- The missing original DOCX prevents line-by-line manuscript comparison, reference audit, and genuine tracked changes.
+- The supplied original DOCX contained no tracked-change history; the revision is therefore a clean manuscript accompanied by explicit claim and reference audits.

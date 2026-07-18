@@ -1,14 +1,13 @@
 # Blockers and external dependencies
 
-## Missing original manuscript
+## Original manuscript — resolved
 
-The original manuscript is absent from both specified paths. Original-DOCX
-preservation, a line-by-line reference audit, and genuine tracked changes cannot
-be completed until the user supplies `paper_final.docx` at either
-`/mnt/data/paper_final.docx` or `paper/paper_final.docx`. A clean replacement
-manuscript was generated in Markdown and DOCX, rendered to PDF, and inspected;
-it is explicitly labeled provisional because it cannot be compared line by line
-with the missing source manuscript.
+The user supplied `paper/original/paper_final.docx` on 2026-07-18. It is
+preserved unchanged with its checksum and has now been audited line by line.
+The source DOCX contains no Word comments or tracked-change elements, so the
+revised DOCX remains a clean revision accompanied by explicit change,
+claim-disposition, and reference-audit files rather than being mislabeled as
+tracked changes.
 
 ## Bangladesh DoE machine-readable observations
 

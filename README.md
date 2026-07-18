@@ -76,7 +76,8 @@ Run quality checks:
 - `tables/`, `figures/`: generated, manuscript-traceable results
 - `docs/`: source audit, formal source decision, data documentation
 - `reports/`: baseline snapshot, QA, forecasting, blockers, result comparison
-- `paper/revised/`: provisional revised manuscript and claim traceability
+- `paper/original/`: checksummed, unchanged source manuscript
+- `paper/revised/`: clean revised manuscript, revision log, and claim traceability
 
 The root `main.ipynb` and `analysis.ipynb` are legacy artifacts. Their stored
 outputs are preserved under `reports/original_results_snapshot/`; do not use
@@ -84,4 +85,3 @@ them as the revised analysis.
 
 See [DATA_SOURCES.md](DATA_SOURCES.md), [DATA_DICTIONARY.md](DATA_DICTIONARY.md),
 [METHODOLOGY.md](METHODOLOGY.md), and [LIMITATIONS.md](LIMITATIONS.md).
-
