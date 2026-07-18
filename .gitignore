@@ -24,8 +24,12 @@ env/
 figures/*.png
 figures/*.pdf
 
-# Data outputs (generated at runtime)
-data/processed/
+# Large provider files and caches (generated small processed tables are tracked)
+data/raw/cams/*.grib
+data/raw/cams/*.nc
+data/raw/cams/*.zip
+data/raw/meteorology/*.grib
+data/raw/meteorology/*.nc
 
 # IDE / editors
 .vscode/

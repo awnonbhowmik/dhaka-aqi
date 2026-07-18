@@ -1,0 +1,25 @@
+manifest_version: 1
+generated_by: scripts/build_primary_dataset.py
+sources:
+- source_id: airnow_dhaka_dk1010001
+  provider: US EPA AirNow / U.S. Department of State
+  product_version: daily_data_v2.dat dated archive
+  retrieval_timestamp: per-row; see raw file and request log
+  download_url_template: https://files.airnowtech.org/airnow/{YYYY}/{YYYYMMDD}/daily_data_v2.dat
+  station:
+    station_id: DK1010001
+    full_station_id: 050DK1010001
+    name: Dhaka
+    latitude: 23.796374
+    longitude: 90.424614
+  license: U.S. federal public data; third-party terms checked at use
+  redistribution_allowed: true
+  artifacts:
+  - filename: data/raw/airnow/dhaka_pm25_daily_data_v2.csv
+    sha256: 853dfaee7cf43e423f431f6c9510cc346434195bb8d62b6c391ae85fea6a2f3d
+    file_size: 946003
+    description: Exact extracted Dhaka source rows plus response digests
+  - filename: data/provenance/airnow_request_log.csv
+    sha256: f3330303e19ee8843d3f9ab84cfd7946ebb110904278abccf4c31d96ce738b16
+    file_size: 434870
+    description: One audit record for every dated archive request
