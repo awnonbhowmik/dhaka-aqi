@@ -35,9 +35,10 @@ The dated official archive provides a Dhaka record with station code
 90.424614 E, agency `U.S. Department of State Bangladesh - Dhaka`, parameter
 `PM2.5-24hr`, unit `UG/M3`, duration 24, concentration, AQI, and category. The
 daily fact sheet says only valid data are included. Values are preliminary
-AirNow summaries rather than regulatory validated data. A peer-reviewed source
-identifies a BAM-1020 at the embassy. Public Department of State transmission
-ended in March 2025, so the study cannot honestly extend through 2026.
+AirNow summaries rather than regulatory validated data. The archive row does
+not identify the instrument, so that field remains unresolved. Public
+Department of State transmission ended in March 2025, so the study cannot
+honestly extend through 2026.
 
 ### OpenAQ
 
@@ -84,4 +85,3 @@ physical rainfall.
   design value. EPA's 2024 AQI PM2.5 breakpoints begin 0.0–9.0 (AQI 0–50),
   9.1–35.4 (51–100), 35.5–55.4 (101–150), 55.5–125.4 (151–200),
   125.5–225.4 (201–300), and 225.5–325.4 (301–500).
-

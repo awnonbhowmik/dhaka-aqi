@@ -7,7 +7,6 @@ import csv
 import hashlib
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "data/provenance/legacy_observation_provenance.csv"
 FIELDS = [

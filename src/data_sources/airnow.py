@@ -5,7 +5,6 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import hashlib
-import io
 import logging
 import ssl
 import time
@@ -14,7 +13,6 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from pathlib import Path
-
 
 LOGGER = logging.getLogger(__name__)
 BASE_URL = "https://files.airnowtech.org/airnow/{year}/{ymd}/daily_data_v2.dat"

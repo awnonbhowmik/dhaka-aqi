@@ -12,7 +12,7 @@ dated archive:
 - provider: U.S. Department of State Bangladesh - Dhaka
 - parameter: 24-hour PM2.5 concentration
 - unit: micrograms per cubic metre (`UG/M3` in source)
-- measurement: ground monitor; BAM-1020 is reported in the literature
+- measurement: ground monitor; instrument is not encoded in the archive row
 - data status: preliminary archive summaries, not regulatory validated
 - accessible coverage: determined by the downloader, ending in March 2025
 
@@ -44,4 +44,3 @@ The revised empirical scope is:
 
 The end date is the last month satisfying the completeness rule. A later
 calendar date is never filled or called observed.
-

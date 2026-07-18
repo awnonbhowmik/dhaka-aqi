@@ -12,7 +12,6 @@ import yaml
 from src.aqi import AQI_STANDARD, AQI_VERSION, aqi_category, pm25_aqi
 from src.quality.completeness import DEFAULT_DAY_COVERAGE_PCT
 
-
 SOURCE_ID = "airnow_dhaka_dk1010001"
 TIMEZONE = "Asia/Dhaka"
 
@@ -78,7 +77,7 @@ def build_daily(raw_path: Path) -> pd.DataFrame:
             "averaging_period": "24-hour",
             "provider": "US EPA AirNow",
             "original_provider": raw["agency"],
-            "instrument": "BAM-1020 (literature-reported; not encoded in archive row)",
+            "instrument": "unresolved; not encoded in AirNow archive row",
             "qa_flag": "AirNow valid preliminary summary; validation status unavailable",
             "validity": "valid_preliminary",
             "source_file": raw["source_url"],
@@ -198,4 +197,3 @@ def update_manifest(manifest_path: Path, raw_path: Path, request_log: Path) -> N
     }
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(yaml.safe_dump(manifest, sort_keys=False), encoding="utf-8")
-

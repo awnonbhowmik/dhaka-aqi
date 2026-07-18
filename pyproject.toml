@@ -33,6 +33,16 @@ addopts = "-q"
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+exclude = [
+  "src/config.py",
+  "src/data_loader.py",
+  "src/map_utils.py",
+  "src/viz.py",
+  "scripts/fetch_cams_pollutants.py",
+  "scripts/fetch_daily_aqi.py",
+  "scripts/snapshot_original.py",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]

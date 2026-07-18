@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import calendar
 
-
 DEFAULT_DAY_COVERAGE_PCT = 75.0
 
 

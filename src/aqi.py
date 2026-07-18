@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import math
 
-
 AQI_STANDARD = "US EPA AQI"
 AQI_VERSION = "2024 PM2.5 breakpoints (effective 2024-05-06)"
 

@@ -2,11 +2,13 @@
 
 ## Missing original manuscript
 
-The original manuscript is absent from both specified paths. Required DOCX
-preservation, text revision, reference-by-reference verification, PDF rendering,
-page inspection, and tracked claim comparison cannot be completed until the
-user supplies `paper_final.docx` at either `/mnt/data/paper_final.docx` or
-`paper/paper_final.docx`.
+The original manuscript is absent from both specified paths. Original-DOCX
+preservation, a line-by-line reference audit, and genuine tracked changes cannot
+be completed until the user supplies `paper_final.docx` at either
+`/mnt/data/paper_final.docx` or `paper/paper_final.docx`. A clean replacement
+manuscript was generated in Markdown and DOCX, rendered to PDF, and inspected;
+it is explicitly labeled provisional because it cannot be compared line by line
+with the missing source manuscript.
 
 ## Bangladesh DoE machine-readable observations
 
@@ -28,4 +30,3 @@ not fill later dates.
 OpenAQ API v3 requires an API key. An adapter is documented, but no credential
 is stored or requested in the repository. OpenAQ is not needed for the selected
 primary series because the original AirNow archive is directly accessible.
-
