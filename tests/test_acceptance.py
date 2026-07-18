@@ -292,3 +292,41 @@ def test_31_rolling_origin_evaluation_is_deterministic() -> None:
     first = rolling_origin(values, dates, horizon=12)
     second = rolling_origin(values, dates, horizon=12)
     pd.testing.assert_frame_equal(first, second)
+
+
+def test_32_original_manuscript_is_preserved_by_checksum() -> None:
+    manifest = yaml.safe_load(
+        (ROOT / "paper/original/original_manifest.yml").read_text(encoding="utf-8")
+    )
+    original = ROOT / manifest["filename"]
+    assert original.stat().st_size == manifest["file_size"]
+    assert sha256(original) == manifest["sha256"]
+
+
+def test_33_all_original_references_have_an_audit_disposition() -> None:
+    audit = pd.read_csv(ROOT / "reports/original_reference_audit.csv")
+    assert len(audit) == 41
+    assert audit["reference_number"].tolist() == list(range(1, 42))
+    assert audit["disposition"].notna().all()
+    assert audit["notes"].notna().all()
+
+
+def test_34_revised_manuscript_explains_multi_pollutant_scope() -> None:
+    paper = (ROOT / "paper/revised/paper_revised.md").read_text(encoding="utf-8")
+    normalized = " ".join(paper.split())
+    assert "PM10, NO2, and SO2 were not removed because they are unimportant" in normalized
+    assert "the only available calculated subindex" in normalized
+    assert "missing original manuscript" not in paper.lower()
+    assert "10.3389/frsc.2021.681759" in paper
+
+
+def test_35_revised_manuscript_does_not_carry_rejected_dois_or_duplicate_abstract() -> None:
+    audit = pd.read_csv(ROOT / "reports/original_reference_audit.csv").fillna("")
+    paper = (ROOT / "paper/revised/paper_revised.md").read_text(encoding="utf-8")
+    rejected = audit[
+        audit["disposition"].isin({"remove", "replace", "correct_before_use"})
+        & audit["doi"].ne("")
+    ]
+    assert all(doi not in paper for doi in rejected["doi"])
+    assert paper.count("# Abstract") == 1
+    assert "Awnon Bhowmik" in paper and "Mahmudul Hasan" in paper and "Goutam Saha" in paper

@@ -1,8 +1,17 @@
 ---
 title: "Observed PM2.5 at an Identified U.S. Department of State Monitor in Dhaka, 2019-February 2025"
 subtitle: "A provenance audit, robust trend assessment, and short-horizon forecast"
-date: "2026-07-17"
+date: "2026-07-18"
 ---
+
+**Awnon Bhowmik¹, Mahmudul Hasan², and Goutam Saha²˒³⁎**
+
+¹ College of Engineering & Computer Science, Colorado Technical University,
+Colorado Springs, CO 80907, USA<br>
+² Department of Mathematics, University of Dhaka, Dhaka 1000, Bangladesh<br>
+³ Miyan Research Institute, International University of Business Agriculture
+and Technology, Uttara, Dhaka 1230, Bangladesh<br>
+⁎ *Correspondence:* gsahamath@du.ac.bd
 
 # Abstract
 
@@ -26,25 +35,39 @@ contrast was -7.32 ug/m3 (95% bootstrap CI
 -42.90 to 28.65); the design does not support a
 causal lockdown claim. SARIMA achieved the lowest rolling-origin MASE
 (0.85) and was used for a 24-month forecast; 2030 values are shown
-only as conditional targets/benchmarks. The audit reverses the legacy declining
-trend claim and removes unsupported multi-pollutant, source-apportionment,
-health-burden, and citywide-exposure conclusions.
+only as conditional targets/benchmarks. PM10, NO2, and SO2 remain important AQI
+pollutants in principle, but their legacy columns lacked the station, unit, and
+method continuity required for empirical analysis. The audit reverses the
+legacy declining trend claim and removes unsupported multi-pollutant,
+source-apportionment, health-burden, and citywide-exposure conclusions.
 
 **Keywords:** PM2.5; Dhaka; AirNow; data provenance; seasonal Mann-Kendall;
 rolling-origin forecasting; reproducibility
 
 # 1. Introduction
 
-Dhaka's air pollution is an important public-health and policy concern, but a
-credible time-series study requires consistent measurement lineage. The legacy
-repository described a 2017-2025 multi-pollutant monitoring record. Audit of its
-code and deleted workbooks instead found CAMS reanalysis values, scraped AQI,
-monthly values repeated across days, unresolved station identities, and annual
-contextual variables repeated monthly. This revision asks: (1) what seasonal
-and temporal patterns are supported by one identified ground monitor; (2) how
-sensitive is trend inference to seasonality and serial dependence; (3) what
-non-causal association is visible during the 2020 restriction period; and (4)
-which short-horizon forecast model outperforms seasonal naive in rolling tests?
+Air pollution is a major environmental-health concern, and WHO guidance covers
+PM2.5, PM10, NO2, SO2, ozone, and carbon monoxide because their health effects
+and regulatory averaging periods differ [1]. Prior Dhaka studies using other
+monitoring periods or research designs have reported strong winter seasonality,
+high particulate concentrations, and roles for gaseous pollutants [6-10]. Those
+studies establish the scientific relevance of a multi-pollutant perspective;
+they do not validate unrelated columns in the present repository.
+
+A credible time-series study requires consistent measurement lineage. The
+original manuscript described a 2017-2025 multi-pollutant monitoring record,
+but audit of its code, workbooks, and Git history found CAMS reanalysis values,
+scraped AQI, monthly values repeated across days, unresolved station identities,
+and annual contextual variables repeated monthly. The original 41-reference
+list also contained wrong or unrelated DOIs; its retained sources were checked
+against publisher, registry, or official metadata.
+
+This revision asks: (1) what seasonal and temporal patterns are supported by
+one identified ground monitor; (2) how sensitive is trend inference to
+seasonality and serial dependence; (3) what non-causal association is visible
+during the 2020 restriction period; and (4) which short-horizon forecast model
+outperforms seasonal naive in rolling tests? The scope is deliberately narrower
+than the environmental importance of Dhaka's full pollutant mixture.
 
 # 2. Data and methods
 
@@ -65,7 +88,30 @@ reports were selected as a separate validation source, but no reproducible raw
 machine-readable DoE series was found; no numeric series was extracted from
 charts or spliced into AirNow.
 
-## 2.2 QA, aggregation, and cutoff
+## 2.2 Pollutant scope and AQI interpretation
+
+PM10, NO2, and SO2 were not removed because they are unimportant. A
+multi-pollutant AQI calculates a subindex from each simultaneous physical
+concentration and reports the maximum. Any of these pollutants can therefore
+determine AQI when its subindex is largest. They are parallel inputs to the AQI
+algorithm, not causal covariates that “influence” an independently measured AQI.
+
+| Pollutant | Legacy evidence | Revised empirical treatment |
+|---|---|---|
+| PM2.5 | Source-mixed CAMS and monthly values | Replaced by identified AirNow/DoS ground-monitor observations |
+| PM10 | Modeled/repeated values; station and method unresolved | Excluded pending a homogeneous physical concentration series |
+| NO2 | Modeled/repeated values; units and station unresolved | Excluded pending a homogeneous physical concentration series |
+| SO2 | Modeled/repeated values; units and station unresolved | Excluded pending a homogeneous physical concentration series |
+
+Because PM2.5 is the only verified simultaneous concentration, the recalculated
+AQI in this study is specifically the PM2.5 subindex. The stored
+`dominant_pollutant=pm25` value means PM2.5 is the only available calculated
+subindex; it does not prove that PM2.5 dominated Dhaka's complete
+multi-pollutant AQI on every day. Prior Dhaka studies confirm that PM10 and
+gaseous pollutants warrant monitoring [6,7], but their results cannot be
+silently spliced into this station series.
+
+## 2.3 QA, aggregation, and cutoff
 
 The pipeline rejected wrong station, agency, pollutant, unit, duration,
 duplicates, negative values, and dates beyond retrieval. Asia/Dhaka defines
@@ -79,7 +125,7 @@ AQI was recalculated from physical PM2.5 using U.S. EPA breakpoints effective
 values used contemporaneous breakpoints. AQI is a mathematical transform here,
 not an independent environmental outcome.
 
-## 2.3 Statistical analysis
+## 2.4 Statistical analysis
 
 Descriptive results include valid counts, mean, median, standard deviation, and
 IQR. Monthly climatology includes n and t-based 95% confidence intervals.
@@ -96,7 +142,7 @@ month-adjusted interrupted association. Meteorology was unavailable; language
 is associational rather than causal. Annual means are compared with annual
 guidelines, and daily observations with the specified 24-hour forms.
 
-## 2.4 Forecasting and scenarios
+## 2.5 Forecasting and scenarios
 
 Seasonal-naive, naive, drift, ETS, SARIMA, and time/month regression models were
 evaluated at three expanding origins with 12-month test horizons. Metrics were
@@ -183,23 +229,49 @@ the WHO AQG. These values express assumptions/targets, not expected outcomes.
 
 # 4. Discussion
 
+## 4.1 What changed after the provenance audit
+
 Rebuilding from one identified monitor changes both scope and inference. The
 legacy analysis reported a strong PM2.5 decline using a source-mixed 2017-2025
 series. The audited 2019-2025 monitor record instead suggests an increase under
 seasonal MK and HAC regression, with loss of significance after prewhitening.
 The correct conclusion is sensitivity, not a definitive monotonic trajectory.
 
+## 4.2 Why PM10, NO2, and SO2 still matter
+
+The original paper was correct that PM10, NO2, and SO2 are environmentally and
+regulatorily important. Historical multi-site work in Dhaka measured PM10 and
+gaseous pollutants alongside PM2.5 and found pollutant-specific seasonal and
+trend behavior [6,7]. Their absence from the revised numerical tables is an
+evidence boundary: the repository does not contain a homogeneous, traceable
+series for them. Treating modeled CAMS values, repeated monthly values, and
+unresolved ground records as one series would produce precise-looking but
+invalid pollutant rankings and forecasts.
+
+This distinction also changes AQI interpretation. If simultaneous PM10, NO2,
+SO2, CO, and O3 concentrations become available, every applicable subindex
+should be calculated under one declared standard and the daily maximum should
+be retained. Until then, the present calculated AQI is a PM2.5 subindex, and no
+claim is made about the historical percentage of days dominated by other
+pollutants.
+
+## 4.3 Seasonality, sources, COVID, and forecasting
+
 Seasonality is much more stable: winter concentrations are high and monsoon
-concentrations low. This pattern is consistent with meteorological dispersion,
-wet removal, seasonal emissions, and regional transport, but the present data
-do not apportion sources. PM2.5 cannot be summed with PM10 for source
-apportionment, and no chemical speciation, PMF/CMB, inventory, or transport
-attribution is implemented.
+concentrations low, consistent with earlier Dhaka research [6-10]. Published
+black-carbon and isotope studies support roles for local and regional combustion
+sources [9,10], but the present data do not apportion sources. PM2.5 cannot be
+summed with PM10 for source apportionment, and no chemical speciation, PMF/CMB,
+inventory, or transport attribution is implemented here.
 
 The season-matched COVID comparison is uncertain. Although the interrupted
 coefficient is negative, a single-station ecological time series without
 meteorology or mobility controls cannot isolate lockdown effects. Likewise,
 AQI-PM2.5 correlation would be definitional and is not presented as discovery.
+The selected 24-month forecast is an empirical extrapolation, whereas the 2030
+lines are policy/health benchmarks; Bangladesh's national air-quality plan
+provides relevant policy context but does not make those benchmark paths
+probabilistic forecasts [11].
 
 # 5. Limitations
 
@@ -208,11 +280,13 @@ daily summaries; per-hour completeness and archive-row instrument metadata are
 unavailable. Three internal months with 66-71% coverage are excluded from trend
 inference but retained explicitly in forecasting to preserve the calendar
 without imputation. No independent numeric DoE validation or meteorological
-series was available. The feed cessation limits the empirical period. Forecast
-validation has only three annual rolling origins, and the 24-month outlook
-cannot establish 2030 conditions. Trend conclusions depend on serial-correlation
-handling. The missing original manuscript also prevents a line-by-line reference
-audit and genuine tracked changes.
+series was available. The absence of traceable PM10, NO2, SO2, CO, and O3
+prevents calculation of a complete multi-pollutant AQI and pollutant-dominance
+fractions. The feed cessation limits the empirical period. Forecast validation
+has only three annual rolling origins, and the 24-month outlook cannot establish
+2030 conditions. Trend conclusions depend on serial-correlation handling. The
+supplied original contained no tracked-change history; this is therefore a
+clean revision accompanied by claim and reference audits.
 
 # 6. Conclusion
 
@@ -222,7 +296,9 @@ with strong seasonality and method-sensitive trend evidence. The data do not
 support multi-pollutant trends, citywide exposure, source apportionment, an EKC,
 precise attributable mortality, or a causal lockdown claim. A 24-month forecast
 can be reported with rolling-origin validation; 2030 values remain conditional
-benchmarks.
+benchmarks. PM10, NO2, and SO2 remain essential monitoring targets and potential
+AQI-determining pollutants; defensible analysis of them requires a new,
+station-identified, unit-verified, QA-documented concentration series.
 
 # Data and code availability
 
@@ -230,8 +306,10 @@ Exact extracted AirNow rows, request URLs, response checksums, standardized
 products, source manifest, provenance ledger, code, tests, and generated outputs
 are in the repository. Large or terms-restricted CAMS, BMD, OpenAQ, or future
 DoE raw files must be downloaded separately under provider terms. The paper was
-generated from repository commit `7d8d48e66bfe2d7acb291dd48614957dcd28f963`. Raw retrieval occurred on
-2026-07-18 UTC (2026-07-17 America/New_York).
+generated from repository commit `a23c18f84355f8d87cc17e81d9542b7fc9879e7f`. Raw retrieval occurred on
+2026-07-18 UTC (2026-07-17 America/New_York). The supplied original DOCX is
+preserved unchanged with a SHA-256 manifest; its complete claim and 41-reference
+audits are distributed with the revision.
 
 # References
 
@@ -240,3 +318,9 @@ generated from repository commit `7d8d48e66bfe2d7acb291dd48614957dcd28f963`. Raw
 3. U.S. Environmental Protection Agency. *Daily Data File Fact Sheet*. AirNow. Accessed 17 July 2026. https://docs.airnowapi.org/docs/DailyDataFactSheet.pdf
 4. U.S. Environmental Protection Agency. *Final Updates to the Air Quality Index for Particulate Matter*. 2024. https://www.epa.gov/system/files/documents/2024-02/pm-naaqs-air-quality-index-fact-sheet.pdf
 5. U.S. Environmental Protection Agency. *Final Reconsideration of the National Ambient Air Quality Standards for Particulate Matter*. Effective 6 May 2024. https://www.epa.gov/pm-pollution/final-reconsideration-national-ambient-air-quality-standards-particulate-matter-pm
+6. Rahman MM, Mahamud S, Thurston GD. Recent spatial gradients and time trends in Dhaka, Bangladesh, air pollution and their human health implications. *Journal of the Air & Waste Management Association*. 2019;69(4):478-501. https://doi.org/10.1080/10962247.2018.1548388
+7. Pavel MRS, Zaman SU, Jeba F, Islam MS, Salam A. Long-Term (2003-2019) Air Quality, Climate Variables, and Human Health Consequences in Dhaka, Bangladesh. *Frontiers in Sustainable Cities*. 2021;3:681759. https://doi.org/10.3389/frsc.2021.681759
+8. Rahman R-R, Kabir A. Spatiotemporal analysis and forecasting of air quality in the greater Dhaka region and assessment of a novel particulate matter filtration unit. *Environmental Monitoring and Assessment*. 2023;195:824. https://doi.org/10.1007/s10661-023-11370-y
+9. Salam A, Andersson A, Jeba F, Haque MI, Khan MDH, Gustafsson O. Wintertime Air Quality in Megacity Dhaka, Bangladesh Strongly Affected by Influx of Black Carbon Aerosols from Regional Biomass Burning. *Environmental Science & Technology*. 2021;55(18):12243-12249. https://doi.org/10.1021/acs.est.1c03623
+10. Nayem AKM, Zaman SU, Begum F, Salam A. Wintertime black carbon assessment in Dhaka, Bangladesh: Integrated health risk analysis. *Heliyon*. 2025;11(2):e41809. https://doi.org/10.1016/j.heliyon.2025.e41809
+11. Bangladesh Department of Environment. *Bangladesh National Air Quality Management Plan 2024-2030*. Published 7 November 2024. https://doe.gov.bd/pages/publications/bangladesh-national-air-quality-management-plan-2024-2030-469099-6922da4f81fc96cef9eb5ec2
