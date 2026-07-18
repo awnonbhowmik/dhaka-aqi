@@ -1,0 +1,9 @@
+claim_id,manuscript_section,claim_text,result_variable,generated_output_file,generating_script,source_dataset,source_manifest_id,status,notes
+C01,Abstract,2209 valid daily summaries,daily_n,data/processed/primary_observed_daily.parquet,scripts/build_primary_dataset.py,primary_observed_daily,airnow_dhaka_dk1010001,verified,row count
+C02,Abstract,71 complete months,complete_months,tables/descriptive_summary.csv,scripts/run_analysis.py,analysis_monthly,airnow_dhaka_dk1010001,verified,75% plus terminal-month rule
+C03,Abstract,Monthly mean 98.65 ug/m3,mean_ug_m3,tables/descriptive_summary.csv,scripts/run_analysis.py,analysis_monthly,airnow_dhaka_dk1010001,verified,complete months
+C04,Trends,HAC slope 3.14 ug/m3/year,slope_ug_m3_per_year,tables/trend_summary.json,scripts/run_analysis.py,analysis_monthly,airnow_dhaka_dk1010001,verified,month fixed effects
+C05,Trends,Prewhitened p=0.18,p_value,tables/trend_summary.json,scripts/run_analysis.py,analysis_monthly,airnow_dhaka_dk1010001,verified,serial-correlation sensitivity
+C06,COVID,Matched difference -7.32 ug/m3,estimate_ug_m3,tables/covid_association.csv,scripts/run_analysis.py,analysis_monthly,airnow_dhaka_dk1010001,verified,association only
+C07,Guidelines,All complete annual means exceed annual reference levels,exceeds_threshold,tables/annual_guideline_comparison.csv,scripts/run_analysis.py,primary_observed_daily,airnow_dhaka_dk1010001,verified,EPA is descriptive
+C08,Forecast,sarima selected with MASE 0.85,mase,tables/model_ranking.csv,scripts/run_forecasting.py,primary_observed_monthly,airnow_dhaka_dk1010001,verified,three rolling origins
