@@ -18,12 +18,14 @@ import pandas as pd  # noqa: E402
 
 from src.forecasting import forecast_model, rolling_origin  # noqa: E402
 
+plt.rcParams["svg.hashsalt"] = "dhaka-aqi-v0.2"
+
 
 def save(fig: plt.Figure, stem: str) -> None:
     out = ROOT / "figures"
     out.mkdir(parents=True, exist_ok=True)
     fig.savefig(out / f"{stem}.png", dpi=300, bbox_inches="tight")
-    fig.savefig(out / f"{stem}.svg", bbox_inches="tight")
+    fig.savefig(out / f"{stem}.svg", bbox_inches="tight", metadata={"Date": None})
     plt.close(fig)
 
 
@@ -47,7 +49,9 @@ def main() -> None:
     summary = pd.DataFrame({"month_start": future_dates, "target": "pm25", "unit": "ug/m3", "model": best_model, "forecast": result.mean, "lower_95": result.lower, "upper_95": result.upper, "forecast_type": "empirical 24-month forecast"})
     summary.to_csv(tables / "forecast_summary.csv", index=False)
 
-    annual_2024 = monthly[pd.to_datetime(monthly["month_start"]).dt.year == 2024]["pm25_mean"].mean()
+    daily = pd.read_parquet(ROOT / "data/processed/primary_observed_daily.parquet")
+    daily_dates = pd.to_datetime(daily["date_local"])
+    annual_2024 = daily.loc[daily_dates.dt.year == 2024, "value"].mean()
     scenario = pd.DataFrame(
         [
             {"scenario": "No-additional-change benchmark", "year": 2030, "pm25_ug_m3": annual_2024, "lower_95": np.nan, "upper_95": np.nan, "type": "deterministic scenario", "assumption": "2024 observed annual mean held constant; not a forecast"},

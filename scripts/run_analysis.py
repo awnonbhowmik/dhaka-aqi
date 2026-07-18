@@ -28,12 +28,14 @@ from src.analysis import (  # noqa: E402
     trend_free_prewhitened_smk,
 )
 
+plt.rcParams["svg.hashsalt"] = "dhaka-aqi-v0.2"
+
 
 def save_figure(fig: plt.Figure, stem: str) -> None:
     out = ROOT / "figures"
     out.mkdir(parents=True, exist_ok=True)
     fig.savefig(out / f"{stem}.png", dpi=300, bbox_inches="tight")
-    fig.savefig(out / f"{stem}.svg", bbox_inches="tight")
+    fig.savefig(out / f"{stem}.svg", bbox_inches="tight", metadata={"Date": None})
     plt.close(fig)
 
 
