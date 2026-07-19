@@ -20,17 +20,8 @@ env/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Publication figures are generated and tracked for manuscript traceability.
-
-# Large provider files and caches (generated small processed tables are tracked)
-data/raw/cams/*.grib
-data/raw/cams/*.nc
-data/raw/cams/*.zip
-data/raw/meteorology/*.grib
-data/raw/meteorology/*.nc
-data/raw/bmd/
-# BMD deliveries are purpose-limited and must not be redistributed by default.
-data/staging/bmd_*.csv
+# Official report cache (processed tables and the workbook are tracked)
+data/raw/doe/
 
 # IDE / editors
 .vscode/
@@ -47,13 +38,6 @@ Thumbs.db
 *.env
 .env.*
 secrets.json
-
-# Large shapefiles (download separately)
-data/bgd_adm_bbs_20201113_shp/
-data/ne_110m_admin_0_countries/
-
-# CAMS download cache (large binary ZIPs)
-data/.cams_cache/
 
 # Editor lock files
 data/.~lock.*

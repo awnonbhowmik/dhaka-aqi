@@ -1,87 +1,63 @@
-# Dhaka PM2.5 monitor audit and analysis
+# Dhaka air quality from official Bangladesh DoE reports
 
-This repository now supports a PM2.5-focused study of one identified ground
-monitor in Dhaka. It does **not** represent citywide exposure and does not use
-the legacy multi-pollutant CSVs as observations.
+This repository is a fresh, source-first extraction of the Bangladesh Department of Environment (DoE) public air-quality archives. It replaces the earlier mixed AirNow/CAMS workflow.
 
-## Defensible study scope
+Paper-ready findings are in [`analysis/RESEARCH_FINDINGS.md`](analysis/RESEARCH_FINDINGS.md), with full tables in [`analysis/dhaka_doe_analysis.xlsx`](analysis/dhaka_doe_analysis.xlsx) and thirteen figures in [`analysis/figures/`](analysis/figures/).
 
-- Primary provider: U.S. Department of State, distributed by US EPA AirNow
-- Station: `DK1010001` (`050DK1010001`), Dhaka
-- Coordinates: 23.796374 N, 90.424614 E
-- Pollutant: 24-hour PM2.5, µg/m3
-- Raw observed coverage: 2019-01-01 to 2025-03-24
-- Complete analysis period: 2019-01 through 2025-02
-- Completeness: at least 75% valid daily summaries; a terminal month must reach
-  calendar month-end
-- AQI: recalculated from physical PM2.5 with U.S. EPA 2024 breakpoints
-- Validation source: Bangladesh Department of Environment reports/network,
-  retained separately
+The main deliverable is [`data/processed/dhaka_doe_air_quality.xlsx`](data/processed/dhaka_doe_air_quality.xlsx). Its sheets are:
 
-March 2025 is partial and excluded from the primary monthly analysis. No later
-date is reconstructed. The public Department of State feed ended in March 2025.
+- `read_me` — interpretation and cautions
+- `monthly_dataset` — original-style wide monthly table with pollutant and AQI summary columns
+- `daily_dhaka_aqi` — DoE-published Dhaka city AQI, category, and responsible pollutant
+- `monthly_report_aqi` — Dhaka daily AQI extracted from Table 6 of newer monthly reports
+- `monthly_dhaka` — reported Dhaka-station statistics for PM2.5, PM10, SO2, NO2, CO, and O3
+- `population` — annual Bangladesh total, urban, and rural population for 2013–2025
+- `hdi` — retained paper HDI and official UNDP same-year verification series
+- `source_manifest` — archive page, source URL, local cache path, SHA-256, and extraction status
+- `qa_issues` — document-date mismatches, conflicting duplicates, and partial extractions
 
-## Main findings
+## Coverage
 
-Across 71 complete months, the mean of monthly PM2.5 means is 98.65 µg/m3
-(median 79.66). Annual monitor means for every complete year from 2019 through
-2024 exceeded the WHO 2021 annual guideline, Bangladesh 2022 annual standard,
-and current U.S. EPA annual standard (the latter comparison is descriptive, not
-a formal NAAQS compliance determination).
+- Wide monthly dataset: January 2013 through the latest available pollutant or AQI month.
+- Numeric AQI in the wide table: January 2022 onward from monthly-report Table 6, with the standalone daily archive used when it provides more reported days.
+- Standalone daily archive: 13 February 2023 through the latest DoE attachment available when built.
+- Monthly archive: the DoE-linked reports for 2013–2019 and 2022 onward. The public master page does not link 2020 or 2021 year pages.
+- The raw PDF/DOCX cache is reproducible but Git-ignored because it is large.
 
-Trend evidence is method-sensitive. Seasonal Mann-Kendall is positive
-(`p=0.0046`) and month-adjusted HAC regression estimates +3.14 µg/m3/year
-(95% CI 1.42 to 4.86), while trend-free prewhitening is not significant
-(`p=0.18`). The season-matched March-August 2020 contrast is -7.32 µg/m3
-(95% bootstrap CI -42.90 to 28.65); causal lockdown language is not supported.
+The 2013 start date applies to monthly pollutant statistics, not to numeric AQI. Older reports include AQI category charts but not a recoverable daily numeric series, so pre-2022 `aqi_*` cells remain blank. Pollutant `*_median` columns are retained to resemble the original dataset but remain blank because DoE publishes monthly averages, minima, and maxima—not the underlying daily series needed to calculate a median.
 
-Rolling-origin 12-month backtesting selects SARIMA (mean MASE 0.85) over the
-seasonal-naive baseline (1.03). The empirical forecast horizon is 24 months,
-March 2025 through February 2027. The 2030 outputs are deterministic benchmarks,
-not forecasts.
+For each pollutant, `monthly_dataset` takes the unweighted mean of the monthly averages reported by Dhaka stations. Its minimum and maximum are the extreme station-level monthly values. CO uses the reported 8-hour block. Station counts, capture rates, units, unit-resolution flags, AQI day counts, coverage, and source basis are included beside the familiar analysis columns.
 
-## Reproduce
+The `report_date` in the daily table is the date listed on the DoE archive page. `document_aqi_date` is the date printed inside the report. They differ in some source files; those rows are flagged rather than silently altered.
 
-```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements-lock.txt
-.venv/bin/python scripts/reproduce_all.py
-```
+## PM10, SO2, and NO2
 
-The command uses the committed, checksummed AirNow extraction and does not need
-network access. To refresh the official archive first:
+They have not been removed. All six reported criteria pollutants are retained in `monthly_dhaka`. The daily reports publish a city AQI and its controlling `responsible_pollutant`; they do not publish a daily contribution from every pollutant. In this archive, DoE identifies PM2.5 as the responsible pollutant for almost every Dhaka daily AQI row. That does not make PM10, SO2, or NO2 scientifically irrelevant—it means the official daily product does not provide a driver decomposition.
+
+Do not combine the daily AQI values and monthly concentration statistics as though they were the same measurement. AQI is a dimensionless index; the monthly table contains reported concentrations, exceedance counts, and capture rates.
+
+## Population and HDI convention
+
+The separate `population` sheet uses the complete annual 2013–2025 Bangladesh national series from UN World Urbanization Prospects 2025. `rural_population` is calculated as total minus urban and checked against the rural values independently reported in the same official workbook. This is national context, not Dhaka-city population: Worldometer's Dhaka figure is an urban-area estimate, so subtracting it from an incompatible total to create “rural Dhaka” would be misleading.
+
+The `hdi` sheet begins in 2013 so it aligns with the DoE pollutant record. The retained 2013–2024 values match `AIDS_BD_2000_2024.xlsx`; official UNDP observation-year values remain separate in `hdi_undp_same_year`. The source workbook's 2023–2024 values are flagged as apparent forward-fills, and the paper's 2025 context value is UNDP's 2023 observation—not a 2025 observation.
+
+## Rebuild
 
 ```bash
-.venv/bin/python scripts/download_data.py --start 2019-01-01 --end 2025-04-30
-.venv/bin/python scripts/reproduce_all.py
+python -m venv .venv
+.venv/bin/pip install -e '.[dev,analysis]'
+.venv/bin/python scripts/build_doe_workbook.py
+.venv/bin/python scripts/analyze_doe_dataset.py
+.venv/bin/pytest
 ```
 
-Pandoc is required to regenerate the DOCX. LibreOffice and `pdftoppm` are used
-for the optional PDF/page-render inspection.
-
-Run quality checks:
+After changing only the retained context CSV or workbook documentation, regenerate the XLSX without downloading or re-extracting the DoE archive:
 
 ```bash
-.venv/bin/python -m pytest
-.venv/bin/ruff check src scripts tests
+.venv/bin/python scripts/build_doe_workbook.py --workbook-only
 ```
 
-## Repository map
+The monthly AQI Table 6 extractor also requires Poppler's `pdftotext` executable. The DoE web server currently omits an issuing intermediate certificate. The pipeline adds the pinned public Sectigo intermediate in `config/` to the normal operating-system trust store; hostname verification and certificate verification remain enabled.
 
-- `data/raw/airnow/`: exact extracted source lines and response hashes
-- `data/provenance/`: request log and row-level legacy ledger
-- `data/processed/`: standardized observed and explicitly separate empty/model schemas
-- `src/`: acquisition, AQI, QA, statistics, and forecasting functions
-- `scripts/`: one-purpose pipeline commands and end-to-end runner
-- `tables/`, `figures/`: generated, manuscript-traceable results
-- `docs/`: source audit, formal source decision, data documentation
-- `reports/`: baseline snapshot, QA, forecasting, blockers, result comparison
-- `paper/original/`: checksummed, unchanged source manuscript
-- `paper/revised/`: clean revised manuscript, revision log, and claim traceability
-
-The root `main.ipynb` and `analysis.ipynb` are legacy artifacts. Their stored
-outputs are preserved under `reports/original_results_snapshot/`; do not use
-them as the revised analysis.
-
-See [DATA_SOURCES.md](DATA_SOURCES.md), [DATA_DICTIONARY.md](DATA_DICTIONARY.md),
-[METHODOLOGY.md](METHODOLOGY.md), and [LIMITATIONS.md](LIMITATIONS.md).
+See [`DATA_SOURCES.md`](DATA_SOURCES.md) and [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md) before analysis.

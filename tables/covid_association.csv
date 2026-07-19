@@ -1,4 +1,0 @@
-analysis,estimate_ug_m3,ci_low,ci_high,p_value,interpretation
-season-matched March-August,-7.321266666666659,-42.901655,28.65196666666661,0.9307359307359306,unadjusted association
-season-matched April-June sensitivity,-10.111999999999995,-32.79433333333333,12.570333333333338,0.8,unadjusted association
-interrupted time series March-August,-10.61505189946998,-14.877423629515423,-6.352680169424537,1.0548860092199423e-06,month-adjusted association; meteorology unavailable

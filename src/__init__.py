@@ -1,8 +1,3 @@
-"""Auditable Dhaka PM2.5 research package.
+"""Official Bangladesh DoE Dhaka air-quality data extraction package."""
 
-Submodules are intentionally not imported here. This keeps acquisition and QA
-utilities usable without loading plotting or statistical dependencies.
-"""
-
-__version__ = "0.2.0"
-
+__version__ = "1.0.0"

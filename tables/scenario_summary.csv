@@ -1,4 +1,0 @@
-scenario,year,pm25_ug_m3,lower_95,upper_95,type,assumption
-No-additional-change benchmark,2030,98.19088397790057,,,deterministic scenario,2024 observed annual mean held constant; not a forecast
-Bangladesh annual-standard target,2030,35.0,,,policy target,linear benchmark path to Bangladesh 2022 annual PM2.5 standard
-WHO AQG target,2030,5.0,,,health guideline target,linear benchmark path to WHO 2021 annual AQG
