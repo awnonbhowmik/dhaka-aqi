@@ -1,0 +1,2 @@
+# Dhaka AQI: check official DoE archives daily at 06:15 local time.
+15 6 * * * cd /home/awnon/Desktop/dhaka-aqi && mkdir -p .cron && /usr/bin/flock -n .cron/doe-update.lock .venv/bin/python scripts/update_doe_daily.py >> .cron/doe-update.log 2>&1

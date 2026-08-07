@@ -3,9 +3,24 @@ from pathlib import Path
 import pandas as pd
 from openpyxl import load_workbook
 
+from src.doe import discover_monthly_year_pages
+
 ROOT = Path(__file__).resolve().parents[1]
 PROCESSED = ROOT / "data/processed"
 POLLUTANTS = {"PM2.5", "PM10", "SO2", "NO2", "CO", "O3"}
+
+
+def test_monthly_master_page_discovery() -> None:
+    html = """
+    <a href="/pages/static-pages/monthly-air-quality-report-2026-id">
+      Monthly Air Quality Report 2026
+    </a>
+    <a href="https://example.com/not-doe">Monthly Air Quality Report 2025</a>
+    <a href="/pages/other/not-static">Monthly Air Quality Report 2024</a>
+    """
+    assert discover_monthly_year_pages(html) == {
+        2026: "https://doe.gov.bd/pages/static-pages/monthly-air-quality-report-2026-id"
+    }
 
 
 def test_daily_archive_selection_and_lineage() -> None:
@@ -44,6 +59,8 @@ def test_manifest_and_workbook_are_consistent() -> None:
         "monthly_report_aqi",
         "monthly_dhaka",
         "population",
+        "population_worldometer",
+        "tree_cover_loss",
         "hdi",
         "source_manifest",
         "qa_issues",
@@ -113,9 +130,54 @@ def test_population_and_hdi_provenance_and_year_alignment() -> None:
     assert "hdi_undp_same_year" in hdi_headers
 
 
+def test_worldometer_and_tree_cover_context_are_scoped_and_traceable() -> None:
+    worldometer = pd.read_csv(
+        ROOT / "data/context/bangladesh_population_worldometer.csv"
+    )
+    assert worldometer["year"].tolist() == [2010, 2015, 2020, 2022, 2023, 2024, 2025, 2026]
+    assert worldometer["geographic_scope"].eq("national").all()
+    assert worldometer["analysis_role"].eq("descriptive_cross_check").all()
+    assert worldometer["source_url"].str.contains("worldometers.info").all()
+
+    forest = pd.read_csv(ROOT / "data/context/bangladesh_tree_cover_loss.csv")
+    assert forest["year"].tolist() == list(range(2001, 2025))
+    assert forest["geographic_scope"].eq("national").all()
+    assert forest["metric"].eq("tree_cover_loss_all_causes").all()
+    assert forest["provider"].eq("Global Forest Watch").all()
+    assert forest["source_sha256"].str.fullmatch(r"[0-9a-f]{64}").all()
+    assert forest["definition_note"].str.contains("not synonymous").all()
+
+    workbook = load_workbook(ROOT / "data/processed/dhaka_doe_air_quality.xlsx")
+    assert "population_worldometer" in workbook.sheetnames
+    assert "tree_cover_loss" in workbook.sheetnames
+
+
 def test_monthly_report_aqi_lineage() -> None:
     aqi = pd.read_csv(PROCESSED / "doe_monthly_report_dhaka_aqi.csv")
     assert aqi["report_month"].min() == "2022-01"
     assert aqi["aqi_date"].min() == "2022-01-01"
     assert aqi["source_sha256"].str.fullmatch(r"[0-9a-f]{64}").all()
     assert aqi["extraction_method"].eq("poppler_pdftotext_layout_table_6").all()
+
+
+def test_focused_analysis_outputs_replace_exploratory_catalog() -> None:
+    figure_names = sorted(path.name for path in (ROOT / "analysis/figures").glob("*.png"))
+    assert figure_names == [
+        "figure_1_coverage_and_monitoring.png",
+        "figure_2_daily_aqi_burden.png",
+        "figure_3_seasonal_particulate_burden.png",
+        "figure_4_pollution_episodes.png",
+        "figure_5_trend_sensitivity.png",
+    ]
+
+    workbook = load_workbook(ROOT / "analysis/dhaka_doe_analysis.xlsx", read_only=True)
+    expected = {
+        "episodes_gt_150",
+        "trend_sensitivity",
+        "station_sensitivity",
+        "population_worldometer",
+        "tree_cover_loss",
+    }
+    assert expected.issubset(workbook.sheetnames)
+    assert "forecast_backtest" not in workbook.sheetnames
+    assert "context_assoc" not in workbook.sheetnames

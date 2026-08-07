@@ -112,6 +112,34 @@ class TableHTMLParser(HTMLParser):
             self.in_row = False
 
 
+class LinkHTMLParser(HTMLParser):
+    """Collect links and their visible text from an archive landing page."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.current_href: str | None = None
+        self.current_text: list[str] = []
+        self.links: list[tuple[str, str]] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "a":
+            return
+        href = dict(attrs).get("href")
+        if href:
+            self.current_href = href
+            self.current_text = []
+
+    def handle_data(self, data: str) -> None:
+        if self.current_href is not None:
+            self.current_text.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "a" and self.current_href is not None:
+            self.links.append((clean_text(" ".join(self.current_text)), self.current_href))
+            self.current_href = None
+            self.current_text = []
+
+
 def _normalize_archive_url(url: str) -> str:
     """Repair the archive's occasional exact double-paste of an attachment URL."""
     second = url.find("https://", len("https://"))
@@ -175,6 +203,26 @@ def discover_daily(html: str) -> list[ArchiveRecord]:
     for record in records:
         unique[(record.period, record.url)] = record
     return sorted(unique.values(), key=lambda record: (record.period, record.url))
+
+
+def discover_monthly_year_pages(html: str) -> dict[int, str]:
+    """Discover year-specific report pages linked by the monthly master archive."""
+    parser = LinkHTMLParser()
+    parser.feed(html)
+    pages: dict[int, str] = {}
+    for label, href in parser.links:
+        match = re.search(r"Monthly\s+Air\s+Quality\s+Report\s+(20\d{2})", label, re.IGNORECASE)
+        if match is None:
+            continue
+        url = urllib.parse.urljoin(MONTHLY_ARCHIVE_URL, href)
+        parsed = urllib.parse.urlparse(url)
+        if (
+            parsed.scheme == "https"
+            and parsed.hostname == "doe.gov.bd"
+            and parsed.path.startswith("/pages/static-pages/")
+        ):
+            pages[int(match.group(1))] = url
+    return dict(sorted(pages.items(), reverse=True))
 
 
 def discover_monthly(year: int, archive_page: str, html: str) -> list[ArchiveRecord]:
@@ -1108,6 +1156,8 @@ def write_workbook(
     monthly_report_aqi: pd.DataFrame,
     monthly: pd.DataFrame,
     population: pd.DataFrame,
+    population_worldometer: pd.DataFrame,
+    tree_cover_loss: pd.DataFrame,
     hdi: pd.DataFrame,
     manifest: pd.DataFrame,
     qa: pd.DataFrame,
@@ -1130,10 +1180,11 @@ def write_workbook(
         ("Monthly coverage", "Official linked reports: 2013-2019 and 2022 onward; no 2020-2021 year pages are linked"),
         ("Monthly pollutants", "PM2.5, PM10, SO2, NO2, CO, and O3 are retained as separate reported measurements"),
         (
-            "Population/HDI",
+            "National context",
             "Separate national Bangladesh sheets. Population is the complete official UN WUP 2025 "
             "series; rural equals total minus urban and is checked against the reported rural series. "
-            "HDI retains the paper series and a separate official UNDP same-year comparison.",
+            "Worldometer is retained only as a sparse UN-derived cross-check. Global Forest Watch "
+            "tree-cover loss and HDI are descriptive context and are not used as causal predictors.",
         ),
         ("Missing marker", "DoE uses DNA; numeric value is blank and is_missing is TRUE"),
         ("Duplicate policy", "All attachments retained; selected_record is TRUE only when a date is unambiguous"),
@@ -1154,6 +1205,8 @@ def write_workbook(
     _write_frame(workbook, "monthly_report_aqi", monthly_report_aqi)
     _write_frame(workbook, "monthly_dhaka", monthly)
     _write_frame(workbook, "population", population)
+    _write_frame(workbook, "population_worldometer", population_worldometer)
+    _write_frame(workbook, "tree_cover_loss", tree_cover_loss)
     _write_frame(workbook, "hdi", hdi)
     _write_frame(workbook, "source_manifest", manifest)
     _write_frame(workbook, "qa_issues", qa)

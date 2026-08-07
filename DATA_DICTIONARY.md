@@ -65,6 +65,23 @@ Annual Bangladesh national values; they are contextual and are not Dhaka-city me
 - `rural_derivation`, `validation_status`: formula and equality check against the official rural series.
 - `source`, `source_url`, `source_file`, `source_sha256`, `source_note`: exact lineage.
 
+## `population_worldometer`
+
+Selected historical rows displayed on Worldometer's Bangladesh page. This is a sparse presentation of World Population Prospects 2024 estimates and is retained only to cross-check the primary UN population series.
+
+- `total_population`, `urban_population`, `urban_share_pct`, `population_density_per_km2`: displayed mid-year national estimates.
+- `estimate_basis`, `source`, `underlying_source`, `source_url`, `retrieved_utc`: source and retrieval metadata.
+- `analysis_role`, `source_note`: explicit guardrails against treating the series as independent or as a Dhaka-specific pollution predictor.
+
+## `tree_cover_loss`
+
+Annual Bangladesh national tree-cover loss from the Global Forest Watch series distributed by Our World in Data.
+
+- `tree_cover_loss_ha`: hectares of stand-replacement tree-cover disturbance from all causes.
+- `metric`, `geography`, `geographic_scope`: metric and national scope.
+- `provider`, `data_publisher`, `source_url`, `original_dataset_url`, `source_version`, `source_sha256`, `retrieved_utc`: provenance.
+- `analysis_role`, `definition_note`: interpretation boundary; tree-cover loss is not synonymous with permanent deforestation and is not used as a causal covariate.
+
 ## `hdi`
 
 National Bangladesh values retained by request and kept separate from population.
@@ -79,7 +96,10 @@ National Bangladesh values retained by request and kept separate from population
 
 ## `source_manifest`
 
-One row per attachment: source kind, period, official archive page, attachment URL, cached path, file type/size, SHA-256, retrieval timestamp, and extraction status (`ok`, `partial`, or `failed`).
+One row per attachment: source kind, period, official archive page, attachment URL, file type/size,
+SHA-256, retrieval timestamp, and extraction status (`ok`, `partial`, or `failed`). `local_path` is blank
+and `download_status` is `processed_then_deleted` when the report was used as a temporary extraction
+input and discarded. The source URL and hash remain available for reproducibility.
 
 ## `qa_issues`
 

@@ -2,7 +2,7 @@
 
 This repository is a fresh, source-first extraction of the Bangladesh Department of Environment (DoE) public air-quality archives. It replaces the earlier mixed AirNow/CAMS workflow.
 
-Paper-ready findings are in [`analysis/RESEARCH_FINDINGS.md`](analysis/RESEARCH_FINDINGS.md), with full tables in [`analysis/dhaka_doe_analysis.xlsx`](analysis/dhaka_doe_analysis.xlsx) and thirteen figures in [`analysis/figures/`](analysis/figures/).
+Paper-ready findings are in [`analysis/RESEARCH_FINDINGS.md`](analysis/RESEARCH_FINDINGS.md), with full tables in [`analysis/dhaka_doe_analysis.xlsx`](analysis/dhaka_doe_analysis.xlsx), five focused figures in [`analysis/figures/`](analysis/figures/), and a revised manuscript in [`paper/draft/manuscript.md`](paper/draft/manuscript.md).
 
 The main deliverable is [`data/processed/dhaka_doe_air_quality.xlsx`](data/processed/dhaka_doe_air_quality.xlsx). Its sheets are:
 
@@ -12,6 +12,8 @@ The main deliverable is [`data/processed/dhaka_doe_air_quality.xlsx`](data/proce
 - `monthly_report_aqi` — Dhaka daily AQI extracted from Table 6 of newer monthly reports
 - `monthly_dhaka` — reported Dhaka-station statistics for PM2.5, PM10, SO2, NO2, CO, and O3
 - `population` — annual Bangladesh total, urban, and rural population for 2013–2025
+- `population_worldometer` — sparse Worldometer presentation of UN population estimates, retained only as a cross-check
+- `tree_cover_loss` — annual national Global Forest Watch tree-cover loss from all causes, 2001–2024
 - `hdi` — retained paper HDI and official UNDP same-year verification series
 - `source_manifest` — archive page, source URL, local cache path, SHA-256, and extraction status
 - `qa_issues` — document-date mismatches, conflicting duplicates, and partial extractions
@@ -22,7 +24,7 @@ The main deliverable is [`data/processed/dhaka_doe_air_quality.xlsx`](data/proce
 - Numeric AQI in the wide table: January 2022 onward from monthly-report Table 6, with the standalone daily archive used when it provides more reported days.
 - Standalone daily archive: 13 February 2023 through the latest DoE attachment available when built.
 - Monthly archive: the DoE-linked reports for 2013–2019 and 2022 onward. The public master page does not link 2020 or 2021 year pages.
-- The raw PDF/DOCX cache is reproducible but Git-ignored because it is large.
+- Raw PDF/DOCX reports are temporary inputs. They are deleted after successful extraction; URLs and hashes remain in the manifest.
 
 The 2013 start date applies to monthly pollutant statistics, not to numeric AQI. Older reports include AQI category charts but not a recoverable daily numeric series, so pre-2022 `aqi_*` cells remain blank. Pollutant `*_median` columns are retained to resemble the original dataset but remain blank because DoE publishes monthly averages, minima, and maxima—not the underlying daily series needed to calculate a median.
 
@@ -36,9 +38,13 @@ They have not been removed. All six reported criteria pollutants are retained in
 
 Do not combine the daily AQI values and monthly concentration statistics as though they were the same measurement. AQI is a dimensionless index; the monthly table contains reported concentrations, exceedance counts, and capture rates.
 
-## Population and HDI convention
+## National context convention
 
 The separate `population` sheet uses the complete annual 2013–2025 Bangladesh national series from UN World Urbanization Prospects 2025. `rural_population` is calculated as total minus urban and checked against the rural values independently reported in the same official workbook. This is national context, not Dhaka-city population: Worldometer's Dhaka figure is an urban-area estimate, so subtracting it from an incompatible total to create “rural Dhaka” would be misleading.
+
+`population_worldometer` records the historical rows displayed by Worldometer and its stated UN source. It is a sparse source cross-check, not an independent complete annual series. `tree_cover_loss` contains the Global Forest Watch-derived national series distributed by Our World in Data. It measures stand-replacement tree-cover disturbance from all causes and must not be relabeled automatically as permanent deforestation.
+
+Population, tree-cover loss, and HDI are not entered into the Dhaka air-quality models. They are national annual context and are geographically and temporally mismatched to the monitoring outcomes; treating simple correlations as causal evidence would be misleading.
 
 The `hdi` sheet begins in 2013 so it aligns with the DoE pollutant record. The retained 2013–2024 values match `AIDS_BD_2000_2024.xlsx`; official UNDP observation-year values remain separate in `hdi_undp_same_year`. The source workbook's 2023–2024 values are flagged as apparent forward-fills, and the paper's 2025 context value is UNDP's 2023 observation—not a 2025 observation.
 
@@ -52,12 +58,33 @@ python -m venv .venv
 .venv/bin/pytest
 ```
 
-After changing only the retained context CSV or workbook documentation, regenerate the XLSX without downloading or re-extracting the DoE archive:
+The full rebuild uses `--workers 10` by default for concurrent downloads and process-parallel
+PDF/DOCX extraction. Adjust the worker count for machines with fewer CPU cores or less memory.
+For routine updates, `--incremental --discard-raw` reuses previously extracted rows, downloads and
+parses only new or replaced attachments, and deletes those report files after successful output writes.
+
+After changing only the retained context CSV or workbook documentation, regenerate the XLSX entirely
+from processed tables without downloading or re-extracting the DoE archive:
 
 ```bash
 .venv/bin/python scripts/build_doe_workbook.py --workbook-only
 ```
 
+## Automated daily updates
+
+`scripts/update_doe_daily.py` compares the current DoE daily and monthly archive inventory with
+`data/processed/doe_source_manifest.csv`. If nothing has changed it exits without rewriting outputs.
+When attachments are added, removed, or replaced by a new URL, it incrementally updates the processed
+dataset and workbook without retaining raw PDF/DOCX files, reruns the statistical analysis, regenerates
+all analysis tables and figures, and runs the acceptance tests. The installed cron entry uses `flock`
+so overlapping runs cannot occur; its local log and lock files live in the ignored `.cron/` directory.
+
 The monthly AQI Table 6 extractor also requires Poppler's `pdftotext` executable. The DoE web server currently omits an issuing intermediate certificate. The pipeline adds the pinned public Sectigo intermediate in `config/` to the normal operating-system trust store; hostname verification and certificate verification remain enabled.
+
+The current workstation schedule is tracked in `config/dhaka-aqi.crontab` and can be reinstalled with:
+
+```bash
+crontab config/dhaka-aqi.crontab
+```
 
 See [`DATA_SOURCES.md`](DATA_SOURCES.md) and [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md) before analysis.

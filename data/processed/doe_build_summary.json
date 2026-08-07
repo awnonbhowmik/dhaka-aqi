@@ -1,14 +1,15 @@
 {
-  "retrieval_timestamp_utc": "2026-07-18T20:53:17+00:00",
-  "daily_archive_records": 1163,
-  "daily_extracted_rows": 1163,
-  "daily_selected_rows": 1161,
+  "retrieval_timestamp_utc": "2026-08-06T21:05:44+00:00",
+  "daily_archive_records": 1183,
+  "daily_extracted_rows": 1183,
+  "daily_selected_rows": 1181,
   "daily_start": "2023-02-13",
-  "daily_end": "2026-07-14",
+  "daily_end": "2026-08-03",
   "monthly_archive_records": 129,
   "monthly_extracted_rows": 12045,
-  "qa_issues": 74,
-  "workbook": "data/processed/dhaka_doe_air_quality.xlsx",
   "monthly_report_aqi_rows": 1493,
-  "monthly_wide_rows": 163
+  "monthly_wide_rows": 164,
+  "qa_issues": 74,
+  "raw_reports_retained": false,
+  "workbook": "data/processed/dhaka_doe_air_quality.xlsx"
 }

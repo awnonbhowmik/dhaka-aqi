@@ -42,5 +42,8 @@ secrets.json
 # Editor lock files
 data/.~lock.*
 
+# Local scheduled-update locks and logs
+.cron/
+
 # Claude memory (local only)
 .claude/
