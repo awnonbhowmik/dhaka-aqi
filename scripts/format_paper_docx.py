@@ -62,8 +62,18 @@ def set_table_borders(table) -> None:
         border.set(qn("w:color"), "B7B7B7")
 
 
+def remove_paragraph(paragraph) -> None:
+    element = paragraph._element
+    element.getparent().remove(element)
+    paragraph._p = None
+    paragraph._element = None
+
+
 def format_table(table, widths: list[float]) -> None:
-    table.style = "TableNormal"
+    try:
+        table.style = "TableNormal"
+    except KeyError:
+        table.style = "Table"
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
     set_table_borders(table)
@@ -87,9 +97,9 @@ def format_table(table, widths: list[float]) -> None:
             set_cell_margins(cell)
             cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
             if row_index == 0:
-                set_cell_shading(cell, "1F4E78")
+                set_cell_shading(cell, "E6E6E6")
             elif row_index % 2 == 0:
-                set_cell_shading(cell, "EAF2F8")
+                set_cell_shading(cell, "F7F7F7")
             for paragraph in cell.paragraphs:
                 paragraph.style = "Normal"
                 paragraph.paragraph_format.space_before = Pt(0)
@@ -105,29 +115,75 @@ def format_table(table, widths: list[float]) -> None:
                     run.font.size = Pt(8.5)
                     run.font.bold = row_index == 0
                     if row_index == 0:
-                        run.font.color.rgb = RGBColor(255, 255, 255)
+                        run.font.color.rgb = RGBColor(0, 0, 0)
 
 
 def format_paragraphs(document: Document) -> None:
-    styles = document.styles
-    normal = styles["Normal"]
-    normal.font.name = "Times New Roman"
-    normal.font.size = Pt(11)
-    normal.paragraph_format.space_after = Pt(6)
-    normal.paragraph_format.line_spacing = 1.1
+    # Pandoc turns image alt text into a short caption in addition to the
+    # manuscript's full caption. Retain only the full, text-authored caption.
+    for paragraph in list(document.paragraphs):
+        if paragraph.style.name == "Image Caption":
+            remove_paragraph(paragraph)
 
-    for style_name, size in [("Title", 20), ("Heading 1", 15), ("Heading 2", 12)]:
+    if document.paragraphs:
+        document.paragraphs[0].style = "Title"
+
+    styles = document.styles
+    for style_name in ("Normal", "Body Text", "First Paragraph"):
+        style = styles[style_name]
+        style.font.name = "Times New Roman"
+        style.font.size = Pt(11)
+        style.paragraph_format.space_after = Pt(6)
+        style.paragraph_format.line_spacing = 1.1
+        style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+
+    for style_name, size in [
+        ("Title", 20),
+        ("Heading 1", 15),
+        ("Heading 2", 12),
+        ("Heading 3", 11),
+    ]:
         style = styles[style_name]
         style.font.name = "Times New Roman"
         style.font.size = Pt(size)
-        style.font.color.rgb = RGBColor(15, 76, 101)
+        style.font.color.rgb = RGBColor(0, 0, 0)
         style.paragraph_format.space_before = Pt(10)
         style.paragraph_format.space_after = Pt(6)
         style.paragraph_format.keep_with_next = True
 
+    styles["Title"].paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
     for paragraph in document.paragraphs:
         text = paragraph.text.strip()
-        if re.match(r"^Table \d+\.", text):
+        if paragraph.style.name == "Title":
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        elif text == "Awnon Bhowmik":
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            paragraph.paragraph_format.space_before = Pt(2)
+            paragraph.paragraph_format.space_after = Pt(2)
+            for run in paragraph.runs:
+                run.font.name = "Times New Roman"
+                run.font.size = Pt(11)
+                run.font.bold = True
+        elif text == (
+            "Department of Computer Science and Engineering, "
+            "Colorado Technical University"
+        ):
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            paragraph.paragraph_format.space_before = Pt(0)
+            paragraph.paragraph_format.space_after = Pt(2)
+            for run in paragraph.runs:
+                run.font.name = "Times New Roman"
+                run.font.size = Pt(10)
+                run.font.italic = True
+        elif text == "awnonbhowmik@outlook.com":
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            paragraph.paragraph_format.space_before = Pt(0)
+            paragraph.paragraph_format.space_after = Pt(12)
+            for run in paragraph.runs:
+                run.font.name = "Times New Roman"
+                run.font.size = Pt(10)
+        elif re.match(r"^Table \d+\.", text):
             paragraph.style = "Normal"
             paragraph.paragraph_format.keep_with_next = True
             paragraph.paragraph_format.space_before = Pt(8)
